@@ -11,6 +11,7 @@
 #define MAX_LENGTH_DESCRIPTION 200
 #define MAX_LENGTH_TIME 33
 
+
 #define WEEK_CELL_FIRST_COL_WIDTH 10
 #define WEEK_CELL_OTHER_COL_WIDTH 20
 
@@ -75,25 +76,25 @@ enum CommandType getCommandType(char * command) {
 }
 
 void getSubstring(const char *inputString, char* startIndex, char* endIndex, char *outputSubstring) {
-    strncpy(outputSubstring, startIndex + 1, endIndex - startIndex + 1);
-    int length = strlen(outputSubstring) - 1;
-    while(outputSubstring[length] != ']') length--;
-    outputSubstring[length] = '\0';
+    strncpy(outputSubstring, startIndex + 1, endIndex - startIndex + 1); //copy chuỗi từ vị trí startIndex + 1, lấy endIndex - startIndex + 1 kí tự
+    int length = strlen(outputSubstring) - 1;//length = độ dài chuỗi ouputSubstring - 1
+    while(outputSubstring[length] != ']') length--;//vòng lặp tìm kí tự ']' trong chuỗi Substring
+    outputSubstring[length] = '\0'; //xóa kí tự ']'
 }
 
 // 3.2
 
 void getInfo(char* command, char* info, int index){
     char * startIndex = strstr(command, "["); // find first square bracket
-    if(!startIndex) return;
+    if(!startIndex) return; //nếu không tìm được kí tự '[' thoát hàm
     char * endIndex = strstr(startIndex, "]"); // find the respective close bracket
-    while(--index){
-        startIndex = strstr(startIndex + 1, "[");
-        if(!startIndex || !endIndex) break;
-        endIndex = strstr(startIndex, "]");
+    while(--index){ //thực hiện vòng lặp nếu index-1 != 0
+        startIndex = strstr(startIndex + 1, "["); //startIndex trỏ đến vị trí dấu '[' tiếp theo
+        if(!startIndex || !endIndex) break; //nếu 1 trong 2 con trỏ không tồn tại giá trị thoát vòng lặp
+        endIndex = strstr(startIndex, "]");//endIndex trỏ đến vị trí kí tự ']' sau vị trí của startIndex
     }
-    if(index != 0) return;
-    getSubstring(command, startIndex, endIndex, info);
+    if(index != 0) return;//nếu index khác 0 thoát hàm
+    getSubstring(command, startIndex, endIndex, info); //gọi hàm getSubstring
 }
 
 void getTitleFromAdd(char * command, char* out_title){
@@ -413,22 +414,22 @@ int getFieldFromEdit(char * edit_cmd){
     }
     if(i != 0) return 0; // right position
     char _field[strlen(field) + 1]; //khai báo mảng _field chứa (độ dài chuỗi field + 1) kí tự
-    strcpy(_field, strtok(field, ":")); //copy con trỏ field từ vị trí dấu ":" đầu tiên vào mảng _field
-    for(int i =0 ;i < sizeof(field_array)/ sizeof(field_array[0]);i++){ 
-        if(strcmp(field_array[i], _field) == 0) return i + 1;
+    strcpy(_field, strtok(field, ":")); //copy con trỏ field từ vị trí dấu ":" đầu tiên vào con trỏ _field
+    for(int i =0 ;i < sizeof(field_array)/ sizeof(field_array[0]);i++){ //vòng lặp duyệt mảng field_array
+        if(strcmp(field_array[i], _field) == 0) return i + 1; //so sánh kí tự thứ i của chuỗi field_array với chuỗi _field, nếu đúng thì trả về giá trị i+1
     }
     return 0;
 }
  //3.9
 enum Status getStatusFromEdit(char * edit_cmd){
     char status[200];
-    getInfo(edit_cmd,status,1);
-    int length = strlen(status);
-    if(length > 1) return -1;
-    if( status[0] == 'I' || status[0] == 'i') return IN_PROGRESS;
-    if( status[0] == 'd' || status[0] == 'D') return DONE;
-    if( status[0] == 'A' || status[0] == 'a') return ARCHIVED;
-    return -1;
+    getInfo(edit_cmd,status,1);//gọi hàm getInfo lưu thông tin trạng thái của câu lệnh vào status
+    int length = strlen(status);//lenth = độ dài status
+    if(length > 1) return -1; //nếu độ dài > 1 trả về -1
+    if( status[0] == 'I' || status[0] == 'i') return IN_PROGRESS;//nếu status bắt đầu bằng kí tự 'i' hoặc 'I' trả về enum IN_PROGRESS
+    if( status[0] == 'd' || status[0] == 'D') return DONE;//tương tự trên
+    if( status[0] == 'A' || status[0] == 'a') return ARCHIVED;//tương tự trên
+    return -1;//nếu không nằm trong tất cả các trường hợp trên thì trả về -1
 }
 
 
