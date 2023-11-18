@@ -45,13 +45,13 @@ void printUnsupportedTime(struct Task * task) {
 // ------ Begin: Student Answer ------
 enum CommandType getCommandType(char * command) {
     // TODO
-    if(strlen(command) == 0) return INVALID;
-    char temp[strlen(command) + 1];
-    strcpy(temp, command);
-    char *token =  strtok(temp, " ");
+    if(strlen(command) == 0) return INVALID; //command độ dài = 0 trả về INVALID
+    char temp[strlen(command) + 1]; //
+    strcpy(temp, command); //copy command vào temp
+    char *token =  strtok(temp, " "); //lấy chuỗi đầu tiên sau khoảng trắnga
 
     for(int i =0 ; i < strlen(token);i++){
-        if(token[i] >= 'a'){
+        if(token[i] >= 'a' && token[i] <= 'z'){ //nếu token[i] là chữ cái 
             token[i] -= 32;
         }
     }
